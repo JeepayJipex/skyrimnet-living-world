@@ -1,0 +1,27 @@
+{
+  "gameRoot": null,
+  "steamGameRoot": null,
+  "mo2": {
+    "executable": null,
+    "modsDirectory": null,
+    "profilesDirectory": null,
+    "overwriteDirectory": null,
+    "currentProfile": null,
+    "testProfile": null
+  },
+  "skseLogsDirectory": null,
+  "modDirectories": {
+    "skyrimNet": null,
+    "intelEngine": null,
+    "severActions": null,
+    "agencyEngine": null,
+    "relationships": null,
+    "kinship": null,
+    "maras": null
+  },
+  "tools": {
+    "creationKit": null,
+    "papyrusCompiler": null,
+    "xEdit": null
+  }
+}
