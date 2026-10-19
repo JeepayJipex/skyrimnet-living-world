@@ -2,7 +2,7 @@
 
 ## Scope and language
 
-- Read README.md and the relevant docs before changing the project. Phase 0 is complete; gameplay requires explicit approval for a subsequent milestone.
+- Read README.md and the relevant docs before changing the project. Phase 0 is accepted. Phase 0.5 authorizes only the content smoke-test pipeline; runtime acceptance is pending manual testing. Milestone 1 gameplay requires explicit approval.
 - Use English exclusively for code, identifiers, comments, documentation, commits, prompts, configuration values, dialogue, quests, UI, errors, and fixtures. Use Skyrim's English names.
 - Explain Skyrim concepts for an experienced TypeScript developer who is new to Papyrus, Creation Kit, and mod records.
 - Prioritize observable gameplay and maintainable code. Every phase needs a concrete result and evidence appropriate to that result.
@@ -28,6 +28,7 @@
 - Game-save state owns the contract. Dialogue, memories, and an LLM's claim of success cannot complete it or authorize payment.
 - Design duplicate calls, re-entry, partial settlement, save/load, cancellation, and failure before releasing economic actions. Do not assume Papyrus inventory calls form an atomic transaction.
 - Prefer events and bounded callbacks over polling. Avoid extra LLM calls when game state already provides the answer.
+- For Phase 0.5, keep exactly the manifest and standalone diagnostic prompt under `content/`. No automatic inclusion, actions, triggers, Papyrus, ESP/ESL, or native plugin. Run the local validation/package scripts; installation in MO2 remains manual. See docs/SMOKE_TEST.md.
 
 ## Workspace and player data
 
@@ -51,3 +52,17 @@
 7. Fix issues within the milestone, record verified outcomes and risks, and stop for approval before advancing.
 
 Do not label static source scans as behavior tests or claim in-game success without executing the scenario. Changes to test-profile setup, deployment, or runtime state must stay within the user's authorization.
+
+
+## Git and Pull Request Workflow
+
+- Never develop directly on main.
+- Create one feature branch per approved milestone.
+- Keep each PR focused on a single milestone.
+- Use clear English commit messages and PR descriptions.
+- Run available validation before opening a PR.
+- Clearly distinguish automated checks from pending in-game tests.
+- Include testing instructions and known limitations in every PR.
+- Do not merge PRs automatically.
+- Do not begin the next milestone before the current one is approved.
+- Update relevant documentation as part of each milestone.

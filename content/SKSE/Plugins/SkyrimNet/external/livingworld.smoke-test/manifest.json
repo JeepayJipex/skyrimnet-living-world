@@ -1,0 +1,13 @@
+{
+  "id": "livingworld.smoke-test",
+  "type": "bundle",
+  "title": "Living World - Content Smoke Test",
+  "tagline": "Verifies external content discovery without gameplay changes.",
+  "description": "Adds one standalone diagnostic prompt for the Living World deployment smoke test. Inspect living_world_smoke_test.prompt in the dashboard. It is not included in NPC dialogue and makes no LLM requests.",
+  "author": "livingworld",
+  "tags": ["development"],
+  "nsfw": false,
+  "icon": "sparkles",
+  "version": "0.0.1",
+  "min_skyrimnet_version": "0.27.0"
+}
