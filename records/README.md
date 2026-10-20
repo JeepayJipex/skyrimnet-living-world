@@ -1,8 +1,8 @@
 # Milestone 1 record authoring specification
 
-`LivingWorld.esp` does not exist yet. Author it with Creation Kit after the local toolchain is configured. Do not create a placeholder plugin or copy a third-party plugin into this directory.
+`LivingWorld.esp` was authored by the owner with Creation Kit 1.6.1378.1 on 2026-10-20. `Seq/LivingWorld.seq` was generated and verified with xEdit. The owner reports SSEEdit 4.1.5f found 0 errors across 3 records after accidental vanilla cell and Sigurd reference overrides were removed. These files are authored assets: do not regenerate or overwrite them through the build script.
 
-Create only these project-owned records:
+The intended project-owned records and bindings are:
 
 1. A start-game-enabled, never-completed quest with EditorID `LW_ContractController`, no objectives, stages, dialogue topics, AI packages, or NPC overrides. Attach `LW_ContractController` to the quest.
 2. A Player reference alias on that quest, filled with the unique Player reference. Attach `LW_PlayerAlias` to the alias and set its `Controller` property to the quest's controller script. The alias exists only to receive `OnInit` and `OnPlayerLoadGame`.
@@ -18,4 +18,4 @@ Fill controller properties in Creation Kit:
 
 The installed `Skyrim.esm` places Sigurd's reference in `WhiterunBelethorsGeneralGoods` (`CELL 000165B3`). The controller has no cell check, so his normal movements are not obstructed. Keep `Skyrim.esm` as the only record master unless an actual dependency proves necessary. Save the authored plugin here, inspect its records and masters in xEdit, and preserve it in Git. Do not flag it ESL until its record IDs and save behavior have been checked.
 
-Compile the three `Source/Scripts/LW_*.psc` files with the configured Papyrus compiler and matching vanilla, SKSE, and installed SkyrimNet Beta 27 declarations. Put generated output at `build/Scripts/LW_*.pex`; do not commit the PEX files or imported dependency sources. `pwsh -File ./scripts/gameplay.ps1 -Mode Package` will stop until the configured tools and all four authored outputs exist. It checks archive contents, not whether CK compilation, xEdit review, or gameplay behavior succeeded.
+Run `pwsh -File ./scripts/gameplay.ps1 -Mode Compile` with the configured CK Papyrus compiler and matching installed vanilla, SKSE, and SkyrimNet Beta 27 declarations. Generated output goes to `build/Scripts/LW_*.pex`; do not commit PEX files or imported dependency sources. `-Mode Package` requires the ESP, SEQ, and three PEX files and verifies archive contents. CK/xEdit review and gameplay behavior remain separate evidence.

@@ -22,6 +22,8 @@
   "tools": {
     "creationKit": null,
     "papyrusCompiler": null,
+    "papyrusFlags": null,
+    "papyrusImportDirectories": [],
     "xEdit": null
   }
 }

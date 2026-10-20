@@ -1,7 +1,7 @@
 #requires -Version 7.4
 [CmdletBinding()]
 param(
-    [ValidateSet('Validate', 'Package')]
+    [ValidateSet('Validate', 'Compile', 'Package')]
     [string] $Mode = 'Validate'
 )
 
@@ -113,25 +113,93 @@ Write-Host 'NOT CHECKED by this command: SkyrimNet YAML rendering, Papyrus compi
 
 if ($Mode -eq 'Validate') { return }
 
-$configPath = Join-Path $root 'config.local.json'
-if (-not (Test-Path -LiteralPath $configPath -PathType Leaf)) {
-    throw 'Gameplay packaging requires ignored config.local.json with the configured tool paths.'
+if ($Mode -eq 'Compile') {
+    $configPath = Join-Path $root 'config.local.json'
+    if (-not (Test-Path -LiteralPath $configPath -PathType Leaf)) {
+        throw 'Papyrus compilation requires ignored config.local.json.'
+    }
+    $config = Get-Content -LiteralPath $configPath -Raw | ConvertFrom-Json
+    $compiler = $config.tools.papyrusCompiler
+    $flags = $config.tools.papyrusFlags
+    $imports = @($config.tools.papyrusImportDirectories | Where-Object { $_ })
+    if ([IO.Path]::GetFileName($compiler) -cne 'PapyrusCompiler.exe') {
+        throw 'This compile mode supports the installed Creation Kit PapyrusCompiler.exe interface.'
+    }
+    foreach ($file in @($compiler, $flags)) {
+        if (-not $file -or -not (Test-Path -LiteralPath $file -PathType Leaf)) {
+            throw 'Papyrus compilation requires existing tools.papyrusCompiler and tools.papyrusFlags files.'
+        }
+        if ((Get-Item -LiteralPath $file -Force).Attributes -band [IO.FileAttributes]::ReparsePoint) {
+            throw "Compiler input must be a regular file: $file"
+        }
+    }
+    if ($imports.Count -lt 3) {
+        throw 'Papyrus compilation requires vanilla/CK, SKSE, and installed SkyrimNet source directories in tools.papyrusImportDirectories.'
+    }
+    foreach ($directory in $imports) { Assert-RegularDirectory $directory }
+    foreach ($header in @('Actor.psc', 'Quest.psc', 'SKSE.psc', 'SkyrimNetApi.psc')) {
+        if (-not (@($imports | Where-Object { Test-Path -LiteralPath (Join-Path $_ $header) -PathType Leaf }).Count)) {
+            throw "The configured imports do not contain $header."
+        }
+    }
+    $buildRoot = Join-Path $root 'build'
+    if (Test-Path -LiteralPath $buildRoot) { Assert-RegularDirectory $buildRoot }
+    else { New-Item -ItemType Directory -Path $buildRoot | Out-Null }
+    $temporaryOutput = Join-Path $buildRoot ([guid]::NewGuid().ToString('N'))
+    New-Item -ItemType Directory -Path $temporaryOutput | Out-Null
+    try {
+        $importArgument = '-i=' + ((@($sourceRoot) + $imports) -join ';')
+        $output = & $compiler $sourceRoot -all $importArgument ("-f=$flags") ("-o=$temporaryOutput") 2>&1
+        $output | ForEach-Object { Write-Host $_ }
+        $compilerReport = $output | Out-String
+        if ($LASTEXITCODE -ne 0 -or $compilerReport -notmatch '3 succeeded, 0 failed' -or
+            ([regex]::Matches($compilerReport, '0 error\(s\), 0 warning\(s\)')).Count -ne 3) {
+            throw "Papyrus compilation failed (exit code $LASTEXITCODE)."
+        }
+        $compiledNames = @($sourceNames | ForEach-Object { $_.Replace('.psc', '.pex') })
+        Assert-ExactFiles $temporaryOutput $compiledNames
+        foreach ($name in $compiledNames) {
+            if ((Get-Item -LiteralPath (Join-Path $temporaryOutput $name)).Length -eq 0) {
+                throw "Papyrus compiler produced an empty file: $name"
+            }
+        }
+        $scriptsOutput = Join-Path $buildRoot 'Scripts'
+        if (Test-Path -LiteralPath $scriptsOutput) { Assert-RegularDirectory $scriptsOutput }
+        else { New-Item -ItemType Directory -Path $scriptsOutput | Out-Null }
+        foreach ($name in $compiledNames) {
+            Copy-Item -LiteralPath (Join-Path $temporaryOutput $name) -Destination (Join-Path $scriptsOutput $name) -Force
+        }
+        Write-Host 'PASS: compiled three project scripts using configured installed headers.'
+    }
+    finally {
+        $resolvedBuild = [IO.Path]::GetFullPath($buildRoot).TrimEnd('\', '/') + [IO.Path]::DirectorySeparatorChar
+        $resolvedTemporary = [IO.Path]::GetFullPath($temporaryOutput)
+        if (-not $resolvedTemporary.StartsWith($resolvedBuild, [StringComparison]::OrdinalIgnoreCase)) {
+            throw 'Refusing to remove a compiler temporary directory outside build/.'
+        }
+        Remove-Item -LiteralPath $resolvedTemporary -Recurse -Force
+    }
+    return
 }
-$config = Get-Content -LiteralPath $configPath -Raw | ConvertFrom-Json
-foreach ($name in @('creationKit', 'papyrusCompiler', 'xEdit')) {
-    $path = $config.tools.$name
-    if (-not $path -or -not (Test-Path -LiteralPath $path -PathType Leaf)) {
-        throw "Gameplay packaging blocked: tools.$name is not configured to an existing executable."
+
+$pluginPath = Join-Path $root 'records/LivingWorld.esp'
+$seqPath = Join-Path $root 'records/Seq/LivingWorld.seq'
+foreach ($file in @($pluginPath, $seqPath)) {
+    if (-not (Test-Path -LiteralPath $file -PathType Leaf) -or
+        ((Get-Item -LiteralPath $file -Force).Attributes -band [IO.FileAttributes]::ReparsePoint) -or
+        (Get-Item -LiteralPath $file).Length -eq 0) {
+        throw "Gameplay packaging blocked: required authored file is missing, redirected, or empty: $file"
     }
 }
-$pluginPath = Join-Path $root 'records/LivingWorld.esp'
-if (-not (Test-Path -LiteralPath $pluginPath -PathType Leaf)) {
-    throw 'Gameplay packaging blocked: authored records/LivingWorld.esp is missing.'
-}
-$packageFiles = @([pscustomobject]@{ RelativePath = 'LivingWorld.esp'; FullName = $pluginPath })
+$packageFiles = @(
+    [pscustomobject]@{ RelativePath = 'LivingWorld.esp'; FullName = $pluginPath },
+    [pscustomobject]@{ RelativePath = 'SEQ/LivingWorld.seq'; FullName = $seqPath }
+)
 foreach ($name in $sourceNames) {
     $pex = Join-Path $root ('build/Scripts/' + $name.Replace('.psc', '.pex'))
-    if (-not (Test-Path -LiteralPath $pex -PathType Leaf)) {
+    if (-not (Test-Path -LiteralPath $pex -PathType Leaf) -or
+        ((Get-Item -LiteralPath $pex -Force).Attributes -band [IO.FileAttributes]::ReparsePoint) -or
+        (Get-Item -LiteralPath $pex).Length -eq 0) {
         throw "Gameplay packaging blocked: compiled output is missing for $name."
     }
     if ((Get-Item -LiteralPath $pex).LastWriteTimeUtc -lt (Get-Item -LiteralPath (Join-Path $sourceRoot $name)).LastWriteTimeUtc) {
@@ -187,7 +255,7 @@ try {
     Move-Item -LiteralPath $temporaryPath -Destination $archivePath -Force
     Write-Host "Created: $archivePath"
     Write-Host "SHA256: $((Get-FileHash -LiteralPath $archivePath -Algorithm SHA256).Hash)"
-    Write-Host 'Creation Kit, xEdit, SkyrimNet MCP, and game behavior still require separate verification.'
+    Write-Host 'ZIP integrity passed. CK/xEdit results and runtime behavior require separate evidence.'
 }
 finally {
     if (Test-Path -LiteralPath $temporaryPath) { Remove-Item -LiteralPath $temporaryPath }
