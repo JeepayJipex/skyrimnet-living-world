@@ -24,12 +24,14 @@ Runtime acceptance is closed based on the owner's manual test, documented in [SM
 ## Setup gate for Milestone 1
 
 - Profile creation complete: the owner created the profile recorded locally as `mo2.testProfile`; its directory and enabled local saves/settings were verified on 2026-10-19. A new disposable playthrough remains to be verified.
-- Resolve shared Overwrite/configuration isolation and repair/install CK, a Papyrus compiler, and xEdit manually as described in TESTING.md.
+- Resolve shared Overwrite/configuration isolation as described in TESTING.md. The owner has completed CK record authoring, Papyrus compilation, and xEdit review for Milestone 1.
 - Verify Beta 27 in that session, establish the MCP transport/endpoint, and inspect available tools and quest/script bindings.
 - Select one fixed issuer and one ordinary commodity; verify English names, plugin-relative FormIDs, existing quest involvement, and availability in the profile.
-- The smoke-test ID is `livingworld.smoke-test`; choose the gameplay bundle ID and record prefix when approving Milestone 1. Keep the diagnostic entry isolated from gameplay prompts.
+- The smoke-test ID is `livingworld.smoke-test`; Milestone 1 uses `livingworld.core` and the `LW_` record/script prefix. Keep the diagnostic entry isolated from gameplay prompts.
 
 ## Milestone 1 - A fixed NPC offers a persistent contract
+
+**Implementation status (2026-10-20):** authorized work is on `feat/milestone-1-persistent-contract`. The owner completed CK authoring and xEdit review; the ESP and SEQ are in the repository. Papyrus compilation and offline packaging pass. SkyrimNet MCP validation and in-game acceptance remain pending; see [MILESTONE_1.md](MILESTONE_1.md). This milestone is not accepted or ready to merge.
 
 **Player result:** the issuer proposes exact terms; the player can explicitly accept or reject. Acceptance survives saving and restarting the game.
 

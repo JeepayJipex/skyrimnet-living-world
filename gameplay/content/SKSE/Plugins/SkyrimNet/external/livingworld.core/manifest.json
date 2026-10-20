@@ -1,0 +1,13 @@
+{
+  "id": "livingworld.core",
+  "type": "bundle",
+  "title": "Living World - Persistent Contract",
+  "tagline": "A fixed offer from Sigurd with a saved player decision.",
+  "description": "Adds one offer action and read-only contract context for Sigurd. Delivery and payment are not part of this milestone.",
+  "author": "livingworld",
+  "tags": ["gameplay"],
+  "nsfw": false,
+  "icon": "sparkles",
+  "version": "0.1.0",
+  "min_skyrimnet_version": "0.27.0"
+}

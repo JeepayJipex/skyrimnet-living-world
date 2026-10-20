@@ -1,5 +1,7 @@
 # Development tools and validation
 
+The current [Milestone 1 build and manual acceptance instructions](MILESTONE_1.md) are separate from the Phase 0.5 smoke test. The gameplay entry point is `pwsh -File ./scripts/gameplay.ps1` with `Validate`, `Compile`, and `Package` modes. Packaging requires the authored ESP, SEQ, and compiled scripts. Static validation and compilation do not certify SkyrimNet runtime behavior.
+
 ## Phase 0.5 - Current content smoke test
 
 Build, manual MO2 installation, activation, dashboard/log verification, removal, and troubleshooting are documented in [SMOKE_TEST.md](SMOKE_TEST.md).
@@ -10,7 +12,7 @@ The validator requires PowerShell 7.4+. Its first explicit `-FetchSchema` run do
 
 **Runtime accepted, owner-reported on 2026-10-20:** the plugin loaded with its prompt present; after uninstalling, SkyrimNet marked its retained listing as missing and offered Forget. Files were reported correctly removed. Optional Inja/MCP validation and using Forget were not separately reported. See [the acceptance record](SMOKE_TEST.md#manual-acceptance-result---2026-10-20). The Papyrus, record-editing, and gameplay test requirements below apply to later milestones, not Phase 0.5.
 
-## Availability on 2026-10-19
+## Historical availability on 2026-10-19
 
 | Tool or facility | Observed status | Role |
 |---|---|---|
@@ -28,12 +30,14 @@ The validator requires PowerShell 7.4+. Its first explicit `-FetchSchema` run do
 
 Searches covered PATH, the two known game roots, relevant MO2 mods and configured tools, a local tools directory, and the development area. A missing result is not proof that a tool is absent from every disk location. No software was installed. These are historical observations from the inspected development machine, not requirements or automatic detection results for a new checkout. Recheck availability using your own `config.local.json`.
 
+On 2026-10-20 the owner reported completing Milestone 1 authoring with Creation Kit 1.6.1378.1, SSEEdit 4.1.5f (0 errors across 3 records), and xEdit SEQ generation. The configured CK Papyrus compiler was then run from this repository against installed CK/vanilla, SKSE, and SkyrimNet Beta 27 headers; all three scripts compiled with 0 errors and warnings. These later results supersede the historical missing-tool observations above for this machine. Runtime MCP and in-game checks remain pending.
+
 ## Manual setup
 
 1. Complete the [local configuration setup](../README.md#local-development-configuration). In MO2, create a dedicated test profile (suggested name: **Living World Test**) with profile-local saves and INIs, then record its name in `mo2.testProfile`. Start a new disposable game. Preserve existing gameplay profiles; `mo2.currentProfile` is only an informational snapshot and may itself name the test profile.
 2. Inventory shared outputs before launch. MO2 Overwrite is shared across profiles, and SkyrimNet's overlays/settings may be shared too. Use a separate test output mod and profile-specific enabled content; if the existing list cannot isolate mutable files, use a separate test instance. Do not move or delete the player's existing Overwrite data. Profile-local saves alone do not solve this.
 3. Obtain [Skyrim Special Edition: Creation Kit from Steam](https://store.steampowered.com/app/1946180/Skyrim_Special_Edition_Creation_Kit/). Check its compatibility with the pinned runtime before installation. Follow the [MO2 CK guide](https://github.com/ModOrganizer2/modorganizer/wiki/Skyrim-Creation-Kit-SE-and-MO2) and [executable configuration guide](https://github.com/ModOrganizer2/modorganizer/wiki/Executables-window). Keep authored records and scripts in the workspace; capture CK output in a dedicated test mod/staging location rather than the live game Data directory.
-4. Obtain one Papyrus compiler. CK supplies the conventional toolchain; SkyrimNet Beta 27 also documents [papyrus-compiler 2025.03.18](https://github.com/russo-2025/papyrus-compiler/releases/tag/2025.03.18). Its upstream command uses `papyrus.exe -nocache -h headers -i Source/Scripts -output Scripts`. This is an upstream example, not a command ready to run in this empty source tree. Pin the chosen compiler and supply vanilla/SKSE headers, the appropriate flags file if required, and the exact Beta 27 `SkyrimNetApi.psc`. Additional imports are required only for APIs actually used. Do not redistribute dependency sources.
+4. For this milestone, configure the installed CK `PapyrusCompiler.exe` in `tools.papyrusCompiler`, its `TESV_Papyrus_Flags.flg` in `tools.papyrusFlags`, and installed SKSE, SkyrimNet Beta 27, and vanilla/CK source directories in `tools.papyrusImportDirectories`. Run `pwsh -File ./scripts/gameplay.ps1 -Mode Compile`. The compiler's local usage confirms `-all`, semicolon-separated `-i`, `-f`, and `-o` arguments. Do not redistribute dependency sources. Other compilers need separate command verification before use.
 5. Obtain [xEdit from its official releases](https://github.com/TES5Edit/TES5Edit/releases), add a valid executable to MO2, and use Skyrim SE mode. Validate only our new records and their dependencies; do not clean or resave the full modlist.
 6. For future offline YAML checks, use a pinned parser and JSON Schema validator. The [SkyrimNet Plugins validator suite](https://github.com/MinLL/SkyrimNet-Plugins/blob/481471e5733aeeff923c6442b483b13238111bfd/TESTING.md) uses Node >=20, `js-yaml` and `ajv`. Its tests validate hub infrastructure and are not tests of this mod. Pin reviewed schemas and compare them with Beta 27; a newer hub schema is not an authoritative replacement for the installed runtime validator.
 
@@ -65,7 +69,7 @@ When the user launches the isolated profile through SKSE:
 | SkyrimNet validators and rendering | Installed engine accepts content and resolves its current context | Correct item transfer or durable payment protection |
 | In-game scenarios | Visible effects, inventory/gold deltas, lifecycle and save/load behavior | Compatibility with every untested modlist |
 
-Package later into a staging directory rooted at Data's contents: the owned ESP, `Scripts/*.pex`, and `SKSE/Plugins/SkyrimNet/external/<author>.<slug>/` content. Include only files produced/owned by Living World; no upstream DLLs, logs, settings, or saves. Review the archive's file list before importing it into MO2, and inspect virtual file winners after enabling it. FOMOD is unnecessary for a single configuration.
+Package into an archive rooted at Data's contents: the owned ESP, `SEQ/LivingWorld.seq`, `Scripts/*.pex`, and `SKSE/Plugins/SkyrimNet/external/<author>.<slug>/` content. Include only files produced/owned by Living World; no upstream DLLs, logs, settings, or saves. Review the archive's file list before importing it into MO2, and inspect virtual file winners after enabling it. FOMOD is unnecessary for a single configuration.
 
 ## Manual acceptance scenarios for the complete slice
 

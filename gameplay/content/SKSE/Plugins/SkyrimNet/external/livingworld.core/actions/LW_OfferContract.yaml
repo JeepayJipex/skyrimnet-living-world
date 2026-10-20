@@ -1,0 +1,21 @@
+name: LW_OfferContract
+description: >
+  If you are Sigurd and a conversation naturally turns to supplies or work,
+  especially when the player asks whether you need help, offer 50 gold for
+  10 Firewood. Do not repeat the offer after the player has decided.
+questEditorId: LW_ContractController
+scriptName: LW_ContractController
+executionFunctionName: RequestOffer
+parameterMapping:
+  - type: speaker
+eligibilityRules:
+  - conditions:
+      - decoratorName: lw_can_offer_contract
+        arguments: ["currentActor"]
+        comparisonOperator: "=="
+        expectedValue: eligible
+    logicalOperator: AND
+    required: true
+tags: []
+enabled: true
+defaultPriority: 3
