@@ -1,6 +1,6 @@
 # Roadmap
 
-Phase 0 is accepted. Phase 0.5 is authorized and implemented for offline validation/packaging; its manual runtime acceptance remains pending. Gameplay milestones require explicit approval before implementation. Stop after the authorized phase and record unavailable checks honestly.
+Phase 0 is accepted. Phase 0.5 is complete: offline validation/packaging passed, and the owner confirmed successful runtime loading, prompt availability, and uninstall detection on 2026-10-20. Gameplay milestones require explicit approval before implementation. Stop after the authorized phase and record unavailable checks honestly.
 
 ## Phase 0 - Discovery and bootstrap
 
@@ -15,11 +15,11 @@ No gameplay, integrations, test profile, deployment, or new software installatio
 Implemented: `livingworld.smoke-test` 0.0.1, one standalone literal prompt, pinned official manifest-schema validation, exact two-file payload checks, and a ZIP packager that verifies archive paths and file hashes. PowerShell 7.4+ is the only build tool; no CK, Papyrus, ESP/ESL, DLL, or LLM call is needed.
 
 - Offline validation and packaging: passed; archive generated under `dist/`.
-- Manual installation: pending owner action; no automatic deployment.
-- Runtime External-layer discovery and diagnostic prompt lookup: pending.
-- Removal and restart verification: pending.
+- Manual installation: completed by the owner; no automatic deployment.
+- Runtime bundle loading and diagnostic prompt availability: passed, reported by the owner on 2026-10-20.
+- Removal detection: passed, reported by the owner. SkyrimNet retained the listing as missing and offered a **Forget** button after the bundle files were removed. Retained registry metadata is expected and does not mean the bundle remains installed.
 
-Follow [SMOKE_TEST.md](SMOKE_TEST.md) and report the results before closing runtime acceptance. Completing this phase does not authorize Milestone 1.
+Runtime acceptance is closed based on the owner's manual test, documented in [SMOKE_TEST.md](SMOKE_TEST.md). The Forget action itself was not reported as tested. Completing this phase does not authorize Milestone 1.
 
 ## Setup gate for Milestone 1
 

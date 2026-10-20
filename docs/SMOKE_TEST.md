@@ -1,6 +1,16 @@
 # Phase 0.5 - External content smoke test
 
-**Status: offline validation and packaging complete; runtime acceptance pending the owner's manual test.** Milestone 1 is not authorized.
+**Status: Phase 0.5 complete. Offline validation/packaging passed; the owner confirmed runtime loading, prompt availability, and uninstall detection on 2026-10-20.** Milestone 1 is not authorized.
+
+## Manual acceptance result - 2026-10-20
+
+Evidence: the owner's report from their manual MO2/runtime test, not a new agent-run game session or log inspection.
+
+- SkyrimNet loaded the plugin successfully, and its diagnostic prompt was present.
+- After uninstalling the MO2 mod, SkyrimNet correctly marked the retained plugin listing as **missing** and offered a **Forget** button. The owner reported that the involved files had been removed correctly; the listing was retained rather than silently discarded.
+- This confirms bundle discovery, content availability, and uninstall detection. A retained missing listing is registry metadata, not active installed content. The owner did not report pressing Forget or separately running the optional Inja/MCP validator.
+
+Runtime acceptance for Phase 0.5 is complete on this evidence. The instructions below remain available for repeating the test.
 
 The extension ID is **`livingworld.smoke-test`**, version **`0.0.1`**, with author namespace `livingworld` and minimum SkyrimNet version `0.27.0`. This is a project namespace for an external bundle, not a registered Plugin Hub account. The ID was absent from the public hub index checked on 2026-10-19. Its prompt filename was absent from the installed Beta 27 base content.
 
@@ -65,10 +75,12 @@ If MCP is already connected, the documented `validate_prompt` tool can additiona
 ## Removal test
 
 1. Exit Skyrim and disable **Living World - Content Smoke Test** in MO2's left pane. Restart through the test profile.
-2. Verify the bundle no longer supplies active content and the diagnostic prompt is no longer available from its external layer. Historical registry metadata or old log lines may remain; check the current active layers/startup, not the entire log history.
+2. Verify the bundle no longer supplies active content and the diagnostic prompt is no longer available from its external layer. In the owner's accepted test, SkyrimNet retained a **missing** plugin row with a **Forget** button after uninstalling. The row may remain even though the bundle files have been removed; absence from the listing is not required for a successful uninstall. Check the current active layers/startup, not historical log lines.
 3. Confirm no new startup scan loads this external layer. Other mods should remain enabled. After this check, the smoke-test mod can be removed through MO2 by selecting only its separate mod entry.
 
 The package introduces no save records or scripts. Removal is by disabling/removing its two files through MO2. Never delete SkyrimNet's registry, overlays, configuration, or another mod's files to remove this test. If an overlay copy was created accidentally, diagnose that separate layer before making any changes.
+
+The dashboard's **Forget** action is optional listing cleanup after uninstall detection. It was offered during the accepted test, but using it was not reported or required for acceptance.
 
 ## Troubleshooting
 
@@ -81,6 +93,7 @@ The package introduces no save records or scripts. Removal is by disabling/remov
 | No scanner message | Read the correct session/log directory and effective log level; use dashboard discovery and resolved content as evidence |
 | Dashboard unreachable | Confirm SkyrimNet loaded, its web service started, and the effective address/port; the ZIP does not configure or start that service |
 | Cache missing/checksum mismatch | Re-run `validate.ps1 -FetchSchema`; a changed upstream response is rejected rather than accepted silently |
+| Plugin remains listed as missing after uninstall | Expected behavior observed in the owner's test: files can be correctly removed while registry metadata remains. The offered Forget action is optional listing cleanup. |
 
 ## Verified sources and offline results
 
@@ -89,4 +102,5 @@ The package introduces no save records or scripts. Removal is by disabling/remov
 - Official [manifest schema at revision `232d5e902356595b4a70d97ad04cae03a93e69c3`](https://github.com/MinLL/SkyrimNet-Plugins/blob/232d5e902356595b4a70d97ad04cae03a93e69c3/schemas/manifest.schema.json), dated before the Beta 27 assets commit. SHA256: `A3B26A5E135B37DD4A5DF2208752E35092693AB8C54C970FBC9B3B74697854BF`. Its selected fields were cross-checked against the manifest example in the tagged Beta 27 docs; it is a hub schema, not a substitute for runtime discovery.
 - The managed executable still reports 1.6.1170.0. Existing logs still identify SkyrimNet `0-27-0-0` / public assets `c53cb30e1085`. These were read-only checks, not a new game launch.
 - Executed: schema validation, bundle identity/version and literal-prompt checks, two-file payload allowlist, ZIP path/content verification, repeated-build hash comparison, and rejection checks for malformed manifest metadata, wrong identity/version, extra payload, and template expressions.
-- Pending: manual MO2 installation, current runtime discovery, dashboard prompt lookup/engine validation, and removal verification. No automatic installation or game-state changes were performed.
+- Owner-reported manual results on 2026-10-20: installation/runtime loading, diagnostic prompt availability, and uninstall detection passed. The retained missing listing and offered Forget button were observed. No automatic installation was performed by the agent.
+- Not separately verified: the optional Inja/MCP validation and the Forget action. No fresh agent-run game session or raw runtime-log review was performed for this acceptance update.

@@ -8,7 +8,7 @@ Executed offline: the manifest passes the pinned official JSON Schema; bundle id
 
 The validator requires PowerShell 7.4+. Its first explicit `-FetchSchema` run downloads a checksum-pinned schema into ignored `.local/validation/`; subsequent runs and packaging work offline. This literal-only prompt needs no YAML parser or Node packages. No full Inja parser was executed offline.
 
-**Pending:** owner installation through MO2, live External-layer discovery, diagnostic prompt lookup/engine validation, and removal after restart. No runtime acceptance is claimed. The Papyrus, record-editing, and gameplay test requirements below apply to later milestones, not Phase 0.5.
+**Runtime accepted, owner-reported on 2026-10-20:** the plugin loaded with its prompt present; after uninstalling, SkyrimNet marked its retained listing as missing and offered Forget. Files were reported correctly removed. Optional Inja/MCP validation and using Forget were not separately reported. See [the acceptance record](SMOKE_TEST.md#manual-acceptance-result---2026-10-20). The Papyrus, record-editing, and gameplay test requirements below apply to later milestones, not Phase 0.5.
 
 ## Availability on 2026-10-19
 

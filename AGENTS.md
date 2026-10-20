@@ -2,7 +2,7 @@
 
 ## Scope and language
 
-- Read README.md and the relevant docs before changing the project. Phase 0 is accepted. Phase 0.5 authorizes only the content smoke-test pipeline; runtime acceptance is pending manual testing. Milestone 1 gameplay requires explicit approval.
+- Read README.md and the relevant docs before changing the project. Phase 0 is accepted. Phase 0.5 is complete with owner-reported runtime acceptance on 2026-10-20; see docs/SMOKE_TEST.md for the evidence and limits. Milestone 1 gameplay requires explicit approval.
 - Use English exclusively for code, identifiers, comments, documentation, commits, prompts, configuration values, dialogue, quests, UI, errors, and fixtures. Use Skyrim's English names.
 - Explain Skyrim concepts for an experienced TypeScript developer who is new to Papyrus, Creation Kit, and mod records.
 - Prioritize observable gameplay and maintainable code. Every phase needs a concrete result and evidence appropriate to that result.

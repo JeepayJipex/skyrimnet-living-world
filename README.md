@@ -2,7 +2,7 @@
 
 A gameplay expansion for Skyrim Special Edition in which NPC goals lead to activities, persistent outcomes, and new opportunities. The player can participate, influence events, or leave NPCs to their lives.
 
-**Status: Phase 0 accepted; Phase 0.5 smoke-test bundle validated and packaged offline. Runtime acceptance awaits a manual MO2 test. Gameplay is not implemented.** The first planned slice is a fixed NPC supply contract: offer, accept or reject, deliver items, receive gold, and make the confirmed outcome available to later dialogue.
+**Status: Phase 0 accepted; Phase 0.5 complete with owner-confirmed runtime loading, prompt availability, and uninstall detection on 2026-10-20. Gameplay is not implemented.** The first planned slice is a fixed NPC supply contract: offer, accept or reject, deliver items, receive gold, and make the confirmed outcome available to later dialogue.
 
 All development artifacts and gameplay text are English. This repository is the development workspace; the game and Mod Organizer 2 installation are deployment targets.
 
