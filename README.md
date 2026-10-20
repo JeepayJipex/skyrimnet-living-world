@@ -2,7 +2,7 @@
 
 A gameplay expansion for Skyrim Special Edition in which NPC goals lead to activities, persistent outcomes, and new opportunities. The player can participate, influence events, or leave NPCs to their lives.
 
-**Status: Phase 0 discovery and repository bootstrap complete. Gameplay is not implemented.** The first planned slice is a fixed NPC supply contract: offer, accept or reject, deliver items, receive gold, and make the confirmed outcome available to later dialogue.
+**Status: Phase 0 accepted; Phase 0.5 complete with owner-confirmed runtime loading, prompt availability, and uninstall detection on 2026-10-20. Gameplay is not implemented.** The first planned slice is a fixed NPC supply contract: offer, accept or reject, deliver items, receive gold, and make the confirmed outcome available to later dialogue.
 
 All development artifacts and gameplay text are English. This repository is the development workspace; the game and Mod Organizer 2 installation are deployment targets.
 
@@ -29,11 +29,11 @@ Keep SkyrimNet's own Beta 27 prerequisites: a runtime-compatible SKSE installati
 ## Start here
 
 1. Read [VISION.md](docs/VISION.md) for the proposed architecture and [AGENTS.md](AGENTS.md) for working rules.
-2. Complete the [manual toolchain and isolation setup](docs/TESTING.md). Git and Node are available; a usable Papyrus compiler, Creation Kit, and xEdit were not found in the inspected locations. Existing MO2 entries for CK and xEdit point to missing files.
-3. Confirm the actual runtime interfaces in the isolated profile. SkyrimNet's MCP service is documented and appears in historical logs, but a live connection has not been established. No Codex MCP configuration was installed.
-4. Obtain approval for **Milestone 1: a fixed NPC offer with explicit acceptance and save/load persistence** in [ROADMAP.md](docs/ROADMAP.md).
+2. Follow [Phase 0.5 build and manual MO2 smoke-test instructions](docs/SMOKE_TEST.md). This requires PowerShell 7.4+ and SkyrimNet Beta 27; Creation Kit and Papyrus are unnecessary for this phase.
+3. Verify external discovery, the diagnostic prompt, and removal in the isolated profile. Record the results; offline validation does not establish runtime acceptance.
+4. Before gameplay work, complete the later [toolchain and isolation setup](docs/TESTING.md) and obtain explicit approval for **Milestone 1** in [ROADMAP.md](docs/ROADMAP.md). Missing CK/Papyrus/xEdit tooling does not block the content smoke test.
 
-No installation, compilation, packaging, or gameplay command exists in this repository yet. Phase 0 introduced no package manager, runtime service, DLL, ESP/ESL, Papyrus script, or content bundle.
+Phase 0.5 provides `scripts/validate.ps1` and `scripts/package.ps1`. First run validation with `-FetchSchema` to cache the pinned official manifest schema, then validate/package offline. The resulting `dist/LivingWorld-SmokeTest-0.0.1.zip` contains only the manifest and a standalone diagnostic prompt. Installation through MO2 is manual.
 
 ## Local development configuration
 
@@ -73,5 +73,6 @@ These are development-machine settings, not SkyrimNet configuration or files to 
 | [docs/INTEGRATIONS.md](docs/INTEGRATIONS.md) | Verified extension points, source references, integration matrix and risks |
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Small milestones and approval gates |
 | [docs/TESTING.md](docs/TESTING.md) | Toolchain, setup, actual checks, and future in-game acceptance tests |
+| [docs/SMOKE_TEST.md](docs/SMOKE_TEST.md) | Phase 0.5 build, installation, runtime verification, troubleshooting and removal |
 
-The Beta 27 content layout is verified, but source directories will be introduced with the first approved implementation. Use an MO2 archive rooted at the contents of `Data`, with our own content under `SKSE/Plugins/SkyrimNet/external/<author>.<slug>/`. Do not ship into SkyrimNet's managed `library/` or override its core files. See the [Beta 27 packaging guidance](https://github.com/MinLL/SkyrimNet-GamePlugin/blob/vbeta27/docs/modding/MIGRATING_TO_BETA25.md).
+`content/` holds our Data-content layout, currently `SKSE/Plugins/SkyrimNet/external/livingworld.smoke-test/`. Packaging omits the `content/` wrapper. Do not ship into SkyrimNet's managed `library/` or override its core files. See the [Beta 27 packaging guidance](https://github.com/MinLL/SkyrimNet-GamePlugin/blob/vbeta27/docs/modding/MIGRATING_TO_BETA25.md).

@@ -1,5 +1,15 @@
 # Development tools and validation
 
+## Phase 0.5 - Current content smoke test
+
+Build, manual MO2 installation, activation, dashboard/log verification, removal, and troubleshooting are documented in [SMOKE_TEST.md](SMOKE_TEST.md).
+
+Executed offline: the manifest passes the pinned official JSON Schema; bundle identity/version and the exact literal prompt pass project checks; only the two expected source files are accepted; generated ZIP names and content hashes match the sources. Repeated packaging produces the same ZIP hash. Negative checks reject missing manifest fields, wrong identity, invalid release version, extra payload, and template expressions.
+
+The validator requires PowerShell 7.4+. Its first explicit `-FetchSchema` run downloads a checksum-pinned schema into ignored `.local/validation/`; subsequent runs and packaging work offline. This literal-only prompt needs no YAML parser or Node packages. No full Inja parser was executed offline.
+
+**Runtime accepted, owner-reported on 2026-10-20:** the plugin loaded with its prompt present; after uninstalling, SkyrimNet marked its retained listing as missing and offered Forget. Files were reported correctly removed. Optional Inja/MCP validation and using Forget were not separately reported. See [the acceptance record](SMOKE_TEST.md#manual-acceptance-result---2026-10-20). The Papyrus, record-editing, and gameplay test requirements below apply to later milestones, not Phase 0.5.
+
 ## Availability on 2026-10-19
 
 | Tool or facility | Observed status | Role |
