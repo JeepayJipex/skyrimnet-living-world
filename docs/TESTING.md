@@ -1,5 +1,7 @@
 # Development tools and validation
 
+The current [Milestone 1 build and manual acceptance instructions](MILESTONE_1.md) are separate from the Phase 0.5 smoke test. The gameplay entry point is `pwsh -File ./scripts/gameplay.ps1 -Mode Validate`; `-Mode Package` requires authored records, compiled scripts, and configured tools. Static validation does not certify Papyrus or SkyrimNet runtime behavior.
+
 ## Phase 0.5 - Current content smoke test
 
 Build, manual MO2 installation, activation, dashboard/log verification, removal, and troubleshooting are documented in [SMOKE_TEST.md](SMOKE_TEST.md).

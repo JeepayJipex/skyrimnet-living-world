@@ -31,6 +31,8 @@ Runtime acceptance is closed based on the owner's manual test, documented in [SM
 
 ## Milestone 1 - A fixed NPC offers a persistent contract
 
+**Implementation status (2026-10-20):** authorized source work is on `feat/milestone-1-persistent-contract`. Offline manifest and source checks pass. Record authoring, Papyrus compilation, xEdit review, SkyrimNet MCP validation, and in-game acceptance remain unavailable; see [MILESTONE_1.md](MILESTONE_1.md). This milestone is not accepted or ready to merge.
+
 **Player result:** the issuer proposes exact terms; the player can explicitly accept or reject. Acceptance survives saving and restarting the game.
 
 Smallest scope: one quest controller, the necessary record bindings and confirmation message, one scoped SkyrimNet offer action, and current-state dialogue context. Use a deterministic invocation during development to distinguish dispatch failures from LLM selection failures, then verify the NPC can choose the offer through dialogue. Keep inventory and gold unchanged in this milestone.

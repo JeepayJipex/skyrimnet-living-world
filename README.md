@@ -2,7 +2,7 @@
 
 A gameplay expansion for Skyrim Special Edition in which NPC goals lead to activities, persistent outcomes, and new opportunities. The player can participate, influence events, or leave NPCs to their lives.
 
-**Status: Phase 0 accepted; Phase 0.5 complete with owner-confirmed runtime loading, prompt availability, and uninstall detection on 2026-10-20. Gameplay is not implemented.** The first planned slice is a fixed NPC supply contract: offer, accept or reject, deliver items, receive gold, and make the confirmed outcome available to later dialogue.
+**Status: Phase 0 accepted; Phase 0.5 complete with owner-confirmed runtime loading, prompt availability, and uninstall detection on 2026-10-20. Milestone 1 has source and offline checks on its feature branch, but no authored ESP, compiled PEX, or gameplay validation yet.** The first planned slice is a fixed NPC supply contract: offer, accept or reject, deliver items, receive gold, and make the confirmed outcome available to later dialogue. Milestone 1 covers only the offer and saved choice.
 
 All development artifacts and gameplay text are English. This repository is the development workspace; the game and Mod Organizer 2 installation are deployment targets.
 
@@ -32,6 +32,8 @@ Keep SkyrimNet's own Beta 27 prerequisites: a runtime-compatible SKSE installati
 2. Follow [Phase 0.5 build and manual MO2 smoke-test instructions](docs/SMOKE_TEST.md). This requires PowerShell 7.4+ and SkyrimNet Beta 27; Creation Kit and Papyrus are unnecessary for this phase.
 3. Verify external discovery, the diagnostic prompt, and removal in the isolated profile. Record the results; offline validation does not establish runtime acceptance.
 4. Before gameplay work, complete the later [toolchain and isolation setup](docs/TESTING.md) and obtain explicit approval for **Milestone 1** in [ROADMAP.md](docs/ROADMAP.md). Missing CK/Papyrus/xEdit tooling does not block the content smoke test.
+
+Milestone 1 implementation is approved. Its [source, record authoring requirements, build entry point, and manual acceptance checklist](docs/MILESTONE_1.md) are tracked separately from the accepted smoke test. Until the missing toolchain and live gates pass, the gameplay branch is a Draft PR and is not an installable gameplay mod.
 
 Phase 0.5 provides `scripts/validate.ps1` and `scripts/package.ps1`. First run validation with `-FetchSchema` to cache the pinned official manifest schema, then validate/package offline. The resulting `dist/LivingWorld-SmokeTest-0.0.1.zip` contains only the manifest and a standalone diagnostic prompt. Installation through MO2 is manual.
 

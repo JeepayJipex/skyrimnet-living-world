@@ -1,0 +1,8 @@
+{# Read-only context from the save-backed quest; empty for every other actor. #}
+{% if exists("actorUUID") %}
+{% set lw_contract = lw_contract_context(actorUUID) %}
+{% if lw_contract != "" %}
+## Living World contract
+{{ lw_contract }}
+{% endif %}
+{% endif %}
